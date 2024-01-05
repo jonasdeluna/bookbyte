@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="488.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bookbyte.ui.BookByteController">
+   <children>
+      <TabPane layoutY="-1.0" prefHeight="488.0" prefWidth="881.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Library">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="424.0" prefWidth="745.0">
+                     <children>
+                        <Pane layoutX="464.0" layoutY="24.0" prefHeight="374.0" prefWidth="340.0">
+                           <children>
+                              <Text layoutX="12.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add new book" wrappingWidth="135.025634765625">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="nameField" layoutX="12.0" layoutY="138.0" prefHeight="25.0" prefWidth="316.0" promptText="Hitchhiker's guide to the galaxy..." />
+                              <Text layoutX="14.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title" wrappingWidth="135.025634765625" />
+                              <Text layoutX="14.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ISBN" wrappingWidth="135.025634765625" />
+                              <TextField fx:id="isbnField" layoutX="12.0" layoutY="206.0" prefHeight="25.0" prefWidth="316.0" promptText="9781405053976" />
+                              <Text layoutX="16.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Author" wrappingWidth="135.025634765625" />
+                              <TextField fx:id="authorField" layoutX="12.0" layoutY="273.0" prefHeight="25.0" prefWidth="316.0" promptText="Michelangelo" />
+                              <Button fx:id="addBookButton" layoutX="12.0" layoutY="331.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="316.0" text="Add" />
+                              <TextField fx:id="idField" layoutX="12.0" layoutY="67.0" prefHeight="25.0" prefWidth="316.0" promptText="1042958375849241" />
+                              <Text layoutX="12.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Physcal ID" wrappingWidth="135.025634765625" />
+                           </children>
+                        </Pane>
+                        <Pane layoutX="32.0" layoutY="25.0" prefHeight="368.0" prefWidth="369.0">
+                           <children>
+                              <ListView fx:id="bookList" layoutY="51.0" prefHeight="266.0" prefWidth="369.0" />
+                              <Text layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Library" wrappingWidth="200.0">
+                                 <font>
+                                    <Font name="Microsoft Sans Serif" size="16.0" />
+                                 </font>
+                              </Text>
+                              <Button fx:id="removeBookButton" layoutX="295.0" layoutY="332.0" mnemonicParsing="false" text="Remove" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab fx:id="borrowTabButton" text="Borrow">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Pane layoutX="459.0" layoutY="43.0" prefHeight="295.0" prefWidth="340.0">
+                           <children>
+                              <Text layoutX="12.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Borrower" wrappingWidth="135.025634765625">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="emailField" layoutX="11.0" layoutY="128.0" prefHeight="25.0" prefWidth="316.0" promptText="john@doe.com" />
+                              <Text layoutX="12.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email" wrappingWidth="135.025634765625" />
+                              <Button fx:id="borrowButton" layoutX="10.0" layoutY="244.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="318.0" text="Borrow" />
+                              <TextField fx:id="personNameField" layoutX="12.0" layoutY="67.0" prefHeight="25.0" prefWidth="316.0" promptText="John Doe" />
+                              <Text layoutX="12.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" wrappingWidth="135.025634765625" />
+                           </children>
+                        </Pane>
+                        <Pane layoutX="37.0" layoutY="48.0" prefHeight="315.0" prefWidth="369.0">
+                           <children>
+                              <ListView fx:id="availableBooksList" layoutY="51.0" prefHeight="223.0" prefWidth="369.0" />
+                              <Text layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Available books" wrappingWidth="200.0">
+                                 <font>
+                                    <Font name="Microsoft Sans Serif" size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#7a7a7a" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select one from the list" wrappingWidth="200.0">
+                                 <font>
+                                    <Font name="Microsoft Sans Serif" size="12.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+            <Tab fx:id="returnTabButton" text="Return">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Pane layoutX="37.0" layoutY="48.0" prefHeight="315.0" prefWidth="674.0">
+                           <children>
+                              <ListView fx:id="borrowedBooksList" layoutY="51.0" prefHeight="215.0" prefWidth="650.0" />
+                              <Text layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Borrowed books" wrappingWidth="200.0">
+                                 <font>
+                                    <Font name="Microsoft Sans Serif" size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#7a7a7a" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select one from the list" wrappingWidth="200.0">
+                                 <font>
+                                    <Font name="Microsoft Sans Serif" size="12.0" />
+                                 </font>
+                              </Text>
+                              <Button fx:id="returnBookButton" layoutX="-2.0" layoutY="273.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="652.0" text="Return book" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Check availability">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="availabilityField" layoutX="45.0" layoutY="104.0" prefHeight="25.0" prefWidth="323.0" />
+                        <Text layoutX="45.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Check availability" wrappingWidth="123.91448974609375">
+                           <font>
+                              <Font name="Microsoft Sans Serif" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="45.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Search a book by it's name" />
+                        <Text fx:id="availabilityStatus" layoutX="45.0" layoutY="161.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Status:" />
+                        <Button fx:id="availabilityCheckButton" layoutX="376.0" layoutY="104.0" mnemonicParsing="false" text="Check" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

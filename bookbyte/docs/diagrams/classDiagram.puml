@@ -1,0 +1,105 @@
+@startuml classDiagram
+
+Package book{
+class Book{
+    -author: String
+    -isbn13: String
+    -title: String
+
+    +String getAuthor()
+    +String getISBN13()
+    +String getTitle()
+    +void setAuthor(String author)
+    +void setISBN13(String isbn13)
+    +void setTitle(String title)
+
+}
+class BookCatalog{
+    -books: Map<Book>
+
+    +List<Book> getCatalog()
+    +Boolean addBook(Book book)
+    +Book getBookByIsbn13(String isbn13)
+    +Collection<Book> getBookByTitle(String title)
+    +void load(File file)
+    +void save(File file)
+}
+}
+
+Package library{
+class Library{
+    -libraryBooks: Map<LibraryBook>
+
+    +void addBook(LibraryBook book)
+    +void removeBook(LibraryBook book)
+    +LibraryBook getBook(String id)
+    +Collection<LibraryBook> getBooks()
+    +Collection<LibraryBook> getAvailableBooks()
+    +Collection<LibraryBook> getBorrowedBooks()
+    +void borrowBook(LibraryBook book, Person person)
+    +void load(File libraryFile, BookCatalog bookCatalog, PersonCatalog personCatalog)
+    +void save(File libraryFile)
+}
+
+class LibraryBook{
+    -id: String
+    -book: Book
+    -status: BookStatus
+    -dueDate: LocalDateTime
+    -borrower: Person
+
+    +String getId()
+    +Book getBook()
+    +void setId(String id)
+    +void setBook(Book book)
+    +void borrow(Person borrower, int days)
+    +void returnBook()
+    +BookStatus getBookStatus()
+    +LocalDateTime getDueDate()
+    +Person getBorrower()
+    }
+    
+enum BookStatus{
+    AVAILABLE
+    BORROWED
+}
+}
+
+package person{
+class Person{
+    -uuid: UUID 
+    -name: String
+    -email: String
+
+    +void uuid(UUID uuid)
+    +void name(String name)
+    +void email(String email)
+}
+class PersonCatalog{
+    -people: Map<Person>
+
+    +void addPerson(Person person)
+    +Collection<Person> getPeople()
+    +Person getPersonByEmail(String email, String name)
+    +Person getPersonByUUID(UUID borrower)
+    +void load(File file)
+    +void save(File booksFile)
+}
+}
+abstract class ValidationUtils{
+    +validateISBN13(isbn13)
+    +validateBookID(id)
+    +validatateEmail(email)
+}
+
+Book --* BookCatalog
+Book --> LibraryBook
+LibraryBook --* Library
+Person --* PersonCatalog
+Person --> LibraryBook
+PersonCatalog --> Library
+BookStatus --> LibraryBook
+ValidationUtils --> Book : uses ValidationUtils.validateISBN13(isbn13)
+ValidationUtils --> Book : uses ValidationUtils.validateBookID(id)
+ValidationUtils --> Person : uses ValidationUtils.validateEmail(email)
+@enduml

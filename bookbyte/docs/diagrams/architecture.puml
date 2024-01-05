@@ -1,0 +1,57 @@
+@startuml architecture
+
+component core {
+	package bookbyte.core
+}
+
+component jacoco {
+}
+
+component gson {
+}
+
+core ..> gson
+core ..> jacoco
+
+component ui {
+	package bookbyte.ui
+}
+
+bookbyte.ui ..> bookbyte.core
+
+component javafx {
+	component fxml {
+	}
+}
+
+ui ..> javafx
+bookbyte.ui ..> fxml
+
+component rest{
+	package bookbinder.controller
+	package bookbinder.application
+}
+
+component springboot{
+}
+bookbinder.application ..> bookbinder.controller
+bookbinder.application ..> bookbyte.core
+bookbinder.application ..> bookbyte.ui
+bookbinder.controller ..> bookbyte.core
+rest ..> gson
+rest ..> springboot
+
+component webapp{
+	package bookbyte.webapp
+}
+
+component react{
+}
+
+component next.js{
+}
+
+bookbinder.application ..> bookbyte.webapp
+webapp ..> react
+webapp ..> next.js
+@enduml

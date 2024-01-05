@@ -1,0 +1,35 @@
+{
+  "name": "bookbyte-webapp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prettier": "prettier --write ."
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
+    "next": "13.5.6",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.48.2",
+    "react-query": "^3.39.3"
+  },
+  "devDependencies": {
+    "@cypress/webpack-preprocessor": "^6.0.0",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "cypress": "^13.5.1",
+    "eslint": "^8",
+    "eslint-config-next": "13.5.6",
+    "postcss": "^8",
+    "prettier": "^3.1.0",
+    "tailwindcss": "^3",
+    "typescript": "^5"
+  }
+}

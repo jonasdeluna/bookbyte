@@ -1,0 +1,14 @@
+@startuml sequenceDiagram
+    actor Librarian
+    Librarian -> "BookBinder(Rest)": Add new book in libraryserver
+    "BookBinder(Rest)" -> Library: Add book request
+    Library -> LibraryBook: addBook(book)
+    LibraryBook -> Book: Check if Book exists
+    alt Book does not exist
+        Book -> Book: Add Book in database
+    end
+    Book --> LibraryBook: Create Librarybook \nwith unique id 
+    LibraryBook --> Library: Put Librarybook in Library
+    Library --> "BookBinder(Rest)": Send response
+    "BookBinder(Rest)" --> Librarian: Feedback
+@enduml

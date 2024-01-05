@@ -1,0 +1,5 @@
+/.idea/
+*.out
+**/persons.json
+**/library.json
+**/books.json

@@ -1,0 +1,608 @@
+openapi: 3.0.0
+info:
+  title: Bookbyte API
+  description: API for managing books, library books, and persons
+  version: "1.0.0"
+  contact:
+    email: contact@bookbyte.com
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  - url: 'http://localhost:8080'
+    description: Local Development Server
+
+
+paths:
+  /books/:
+    post:
+      tags:
+        - book
+      summary: Create a new book
+      operationId: createBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: Book created
+        '400':
+          description: Error in request
+        '409':
+          description: Book already exists
+    get:
+      tags:
+        - book
+      summary: Get list of all books
+      operationId: getAllBooks
+      responses:
+        '200':
+          description: A list of books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '204':
+          description: No books found
+
+  /books/overwrite:
+    post:
+      summary: Overwrite all books
+      operationId: overwriteBooks
+      tags:
+        - book
+      requestBody:
+        description: JSON array of books to overwrite the existing catalog
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: All books overwritten successfully
+        '400':
+          description: Invalid request data (e.g., invalid ISBN)
+
+
+
+  /books/{isbn13}:
+    parameters:
+      - in: path
+        name: isbn13
+        required: true
+        schema:
+          type: string
+    put:
+      tags:
+        - book
+
+      summary: Create or update a book by its ISBN
+      operationId: upsertBookByISBN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Book updated
+        '201':
+          description: Book created
+        '400':
+          description: Invalid input
+    get:
+      tags:
+        - book
+
+      summary: Get book by ISBN
+      operationId: getBookByIsbn13
+      parameters:
+        - in: path
+          name: isbn13
+          required: true
+          schema:
+            type: string
+            description: Unique identifier of the library book
+      responses:
+        '200':
+          description: Detailed information about the library book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+        '400':
+          description: Invalid request or error fetching book details
+    patch:
+      tags:
+        - book
+
+      summary: Update a book by its ISBN
+      operationId: updateBookByISBN
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Book updated
+        '400':
+          description: Invalid input
+        '404':
+          description: Book not found
+    delete:
+      summary: Delete a book by ISBN
+      operationId: deleteBookByISBN
+      tags:
+        - book
+
+      responses:
+        '200':
+          description: Book deleted
+        '400':
+          description: Invalid input
+        '404':
+          description: Book not found
+
+  /library/:
+    get:
+      summary: Get all library books
+      operationId: getLibraryBooks
+      tags:
+        - library
+      responses:
+        '200':
+          description: An array of library books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LibraryBook'
+
+
+    post:
+      summary: Add a library book
+      operationId: addLibraryBook
+      tags:
+        - library
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryBookRequest'
+      responses:
+        '201':
+          description: Library book created
+        '400':
+          description: Bad request
+        '404':
+          description: Book not found
+        '409':
+          description: Book already exists in library
+
+    put:
+      summary: Create or update a library book
+      operationId: upsertLibraryBook
+      tags:
+        - library
+      requestBody:
+        description: Library book creation request payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryBookRequest'
+      responses:
+        '200':
+          description: Library book updated
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "LibraryBook updated with ISBN13: 9783161484100"
+        '201':
+          description: Library book created
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "LibraryBook created with ID: 12345"
+        '400':
+          description: There was an error with the request
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "There was an error with the request"
+        '404':
+          description: No book found with provided ISBN
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "No book found with ISBN: 9783161484100"
+
+  /library/overwrite:
+    post:
+      summary: Overwrite all library books
+      operationId: overwriteLibraryBooks
+      tags:
+        - library
+      requestBody:
+        description: JSON array of library books to overwrite the existing library catalog
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/LibraryBook'
+      responses:
+        '201':
+          description: All library books overwritten successfully
+        '400':
+          description: Invalid request data
+
+
+  /library/{id}:
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: string
+
+    get:
+      summary: Get a specific library book by ID
+      operationId: getLibraryBookDetail
+      tags:
+        - library
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            description: Unique identifier of the library book
+      responses:
+        '200':
+          description: Detailed information about the library book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LibraryBookReturnObject'
+        '400':
+          description: Invalid request or error fetching book details
+
+    patch:
+      tags:
+        - library
+
+      summary: Update a library book
+      operationId: updateLibraryBook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryBookRequest'
+      responses:
+        '200':
+          description: Library book updated
+        '400':
+          description: Bad request
+        '404':
+          description: Library book not found
+    delete:
+      summary: Delete a library book
+      operationId: deleteLibraryBook
+      tags:
+        - library
+      responses:
+        '200':
+          description: Library book deleted
+        '400':
+          description: Bad request
+        '404':
+          description: Library book not found
+
+  /person/:
+    get:
+      tags:
+        - person
+      summary: Get all persons
+      operationId: getAllPersons
+      responses:
+        '200':
+          description: An array of persons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Person'
+    post:
+      tags:
+        - person
+
+      summary: Add a person
+      operationId: addPerson
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        '201':
+          description: Person added
+        '400':
+          description: Bad request
+        '409':
+          description: UUID already exists
+
+  /persons/overwrite:
+    post:
+      summary: Overwrite all persons
+      operationId: overwritePersons
+      tags:
+        - person
+      requestBody:
+        description: JSON array of persons to overwrite the existing person catalog
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Person'
+      responses:
+        '201':
+          description: All persons overwritten successfully
+        '400':
+          description: Invalid request data
+
+
+  /person/{uuid}:
+    parameters:
+      - in: path
+        name: uuid
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get person by UUID
+      operationId: getPersonByUUID
+      tags:
+        - person
+      responses:
+        '200':
+          description: Person details
+        '404':
+          description: Person not found
+    patch:
+      summary: Update person details
+      operationId: updatePersonDetails
+      tags:
+        - person
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        '200':
+          description: Person updated
+        '400':
+          description: Bad request
+        '404':
+          description: Person not found
+    put:
+      summary: Update or create a person
+      operationId: updatePerson
+      tags:
+        - person
+      requestBody:
+        description: JSON representation of the person to update or create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+      responses:
+        '200':
+          description: Person updated successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "Person updated successfully!"
+        '400':
+          description: There was an error with the request
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "There was an error with the request! [Error Details]"
+
+    delete:
+      tags:
+        - person
+      summary: Delete a person by UUID
+      operationId: deletePersonByUUID
+      responses:
+        '200':
+          description: Person deleted
+        '400':
+          description: Bad request
+        '404':
+          description: Person not found
+
+  /library/{id}/borrow:
+    post:
+      summary: Borrow a library book
+      operationId: borrowLibraryBook
+      tags:
+        - library
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryBookLendingRequest'
+      responses:
+        '200':
+          description: Book successfully borrowed
+        '400':
+          description: There was an error with the request
+        '404':
+          description: Book or person not found
+        '409':
+          description: Book is not available for borrowing
+        '500':
+          description: Unexpected error
+
+  /library/{id}/return:
+    post:
+      summary: Return a borrowed library book
+      operationId: returnLibraryBook
+      tags:
+        - library
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibraryBookLendingRequest'
+      responses:
+        '200':
+          description: Book successfully returned
+        '400':
+          description: There was an error with the request
+        '404':
+          description: Book or person not found
+        '409':
+          description: Book is not borrowed or not available for return
+        '401':
+          description: Unauthorized return attempt
+        '500':
+          description: Unexpected error
+
+
+components:
+  schemas:
+    Book:
+      type: object
+      required:
+        - isbn13
+        - title
+        - author
+      properties:
+        isbn13:
+          type: string
+          example: '978-3-16-148410-0'
+        title:
+          type: string
+          example: 'Clean Code'
+        author:
+          type: string
+          example: 'Robert C. Martin'
+
+    LibraryBook:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1234567891234567'
+        isbn13:
+          type: string
+          example: '9783161484100'
+        title:
+          type: string
+          example: 'Effective Java'
+        author:
+          type: string
+          example: 'Joshua Bloch'
+    LibraryBookRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1234567891234567'
+        isbn13:
+          type: string
+          example: '9783161484100'
+    LibraryBookReturnObject:
+      type: object
+      properties:
+        id:
+          type: string
+          example: '1234567891234567'
+        isbn13:
+          type: string
+          example: '9783161484100'
+        borrower:
+          type: string
+          example: 'Per Liheim'
+        dueDate:
+          type: number
+          example: 5
+
+    LibraryBookLendingRequest:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          description: UUID of the person borrowing the book
+          example: '123e4567-e89b-12d3-a456-426655440000'
+        days:
+          type: integer
+          format: int32
+          description: Number of days to borrow the book
+          example: 14
+      required:
+        - uuid
+        - days
+
+    Person:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: '123e4567-e89b-12d3-a456-426655440000'
+        name:
+          type: string
+          example: 'john'
+        email:
+          type: string
+          format: email
+          example: 'john.doe@example.com'

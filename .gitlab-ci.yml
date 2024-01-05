@@ -1,0 +1,64 @@
+image: maven:3.8.3-openjdk-17
+
+stages:
+  - build
+  - lint
+  - test
+  - build-web
+  - lint-web
+
+# This includes spotbugs
+build-job:
+  stage: build
+  script:
+    - cd bookbyte
+    - mvn clean install -DskipUiTests=true
+
+lint-test-job:
+  stage: lint
+  script:
+    - cd bookbyte/core
+    - mvn checkstyle:checkstyle
+
+unit-test-job:
+  stage: test
+  script:
+    - cd bookbyte
+    - mvn test -DskipUiTests=true
+
+coverage:
+  stage: test
+  script:
+    - cd bookbyte
+    - mvn clean verify -DskipUiTests=true
+
+
+build_webapp:
+  stage: build-web
+  image: node:latest
+  cache:
+    paths:
+      - bookbyte-webapp/node_modules/
+  script:
+    - cd bookbyte-webapp
+    - npm install
+    - npm run build
+
+
+
+lint_prettier:
+  stage: lint-web
+  image: node:latest
+  script:
+    - cd bookbyte-webapp
+    - npm ci
+    - npm run prettier --check .
+
+
+lint_eslint:
+  stage: lint-web
+  image: node:latest
+  script:
+    - cd bookbyte-webapp
+    - npm ci
+    - npm run lint
